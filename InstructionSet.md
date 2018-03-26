@@ -1,6 +1,6 @@
 # Instruction Set Draft #
 
-Command Number | Command | Argument | Argument | Argument | Description
+Command Number | Binary | Command | Argument | Argument | Argument | Description
 --- | ------ | ---- | --- | -------- | ------- | -----------|
 1   |        | LD  |  A   | CONS |   | Loads constant to A (register)
 2   |        | LD  |  A   |  B   |   | Loads B to A (registers)
