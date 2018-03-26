@@ -12,8 +12,8 @@
 6. LD A Input
 7. LD A Input
 
-Command Number  | Command | Argument | Argument | Argument | Description
--- | ---- | --- | -------- | -------------
+Command Number| Command | Argument | Argument | Argument | Description
+-- | ---- | --- | -------- | ------- | -----------|
 1  |  LD  |  A  | Constant |         | Loads constant to A (register)
 2  |  LD  |  A  |    B     |         | Loads B to A (registers)
 3  |  LD  | RAM |    B     |         | Loads B (register) to RAM
