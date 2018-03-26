@@ -12,10 +12,10 @@
 6. LD A Input
 7. LD A Input
 
-Command Number  | Command | Argument | Argument | Comment |
-------------- | ------------- | ------------- | ------------- |
-1.  | LD | A | Constant | ------------- |
-2.  | LD | A | B | ------------- |
+Command Number  | Command | Argument | Argument | Comment
+------------- | ------------- | ------------- | -------------
+1.  | LD | A | Constant | -------------
+2.  | LD | A | B | ------------- 
 
 ---
 
