@@ -26,5 +26,5 @@ Command Number | Command | Argument | Argument | Argument | Description
 20  |  JZ  |    A     |    0     | ADDRESS | Jumps to Address if A=0
 21  |  PCL | Constant |          |         | Loads constant to PC and jumps (Lower byte)
 22  |  PCU | Constant |          |         | Loads constant to PC and jumps (Lower byte)
-23  |  NOP |          |          |         | No Operation
-24  |  LDI |          |          |         | Loads interrupt to PC and jumps
+23  |  LDI |          |          |         | Loads interrupt to PC and jumps
+24  |  NOP |          |          |         | No Operation
