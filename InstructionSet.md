@@ -1,7 +1,5 @@
 # Instruction Set Draft #
 
----
-
 Command Number | Command | Argument | Argument | Argument | Description
 --- | ---- | --- | -------- | ------- | -----------|
 1   |  LD  |    A     | Constant |         | Loads constant to A (register)
