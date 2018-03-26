@@ -14,8 +14,8 @@
 
 Command Number  | Command | Argument | Argument | Comment
 ------------- | ------------- | ------------- | ------------- | -------------
-1.  | LD | A | Constant | asd
-2.  | LD | A | B | adf
+1  | LD | A | Constant | asd
+2  | LD | A | B | adf
 
 ---
 
