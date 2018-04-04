@@ -3,4 +3,7 @@
 import sys
 
 def toHex(binary):
-    return hex(binary) #Converts number to base 2, then turns into hex
+    temp = binary
+    return hex(int(str(binary),2)) #Converts number to base 2, then turns into hex
+
+print toHex(100001000000000000000111)
