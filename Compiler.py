@@ -7,6 +7,9 @@ REGISTERS = ["A", "B", "C", "D"]
 WRITE = ["1000","0100","0010","0001"]
 READ = ["010", "001", "011", "100"] #Order is A, B, C, D
 
+#Boolean to control if line numbers are printed
+LINENUM = True
+
 #main methods
 def main(): #Main method
     file = getFileName() #gets file name from args
@@ -16,9 +19,17 @@ def main(): #Main method
     for command in allCommands:
         binaryStrings.append(returnBinary(command))#populates binaryStrings
 
+    print("\n\n")
     x=0
-    for i in binaryStrings: print(i)
-
+    for i in binaryStrings:
+        printstring = ""
+        if (LINENUM):
+            printstring = str(x) + " | " + i
+        else:
+            printstring = i
+        print(printstring)
+        x+=1
+    print("\n\n")
 
     return 0;
 
