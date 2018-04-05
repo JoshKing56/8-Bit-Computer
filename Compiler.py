@@ -118,12 +118,12 @@ def ld(operands): #LD
             returnstring += " 000" #readregister
             returnstring += " 000 " #not used
             returnstring += str(operands[1][1:len(operands[1])]) #RAM address
-        else:
+        else: #LD [REGISTER] [CONSTANT]
             returnstring += "011 " #subopcode
             returnstring += writeregister #writeregister
             returnstring += " 000" #readregister
             returnstring += " 000 " #not used
-            returnstring += toBinary(operands[1]) #RAM address
+            returnstring += toBinary(operands[1]) #Constant
 
     elif (operands[0][0:1]=="&"):## LD RAM [REGISTER]
         returnstring += "010 0000 "
@@ -137,18 +137,75 @@ def ld(operands): #LD
     return returnstring
 def clr(operands): #CLR
     return "000 100 0000 000 000 00000000"
-def jz(operands):
-    return 0; #JZ
 def add(operands): #ADD
-    return 0;
+    returnstring = "001"
+    wregister = matchWriteRegister(operands[0])
+    rregister = matchReadRegister(operands[1])
+
+    if (operands[2] in REGISTERS): #ADD [REGISTER] [REGISTER] [REGISTER]
+        returnstring += " 000 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += matchReadRegister(operands[2])
+        returnstring += " 00000000"
+    else: #ADD [REGISTER] [REGISTER] [CONSTANT]
+        returnstring += " 001 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += "000 "
+        returnstring += toBinary(operands[2])
+
+    return returnstring;
 def sub(operands): #SUB
-    return "empty";
+    returnstring = "001"
+    wregister = matchWriteRegister(operands[0])
+    rregister = matchReadRegister(operands[1])
+
+    if (operands[2] in REGISTERS): #SUB [REGISTER] [REGISTER] [REGISTER]
+        returnstring += " 010 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += matchReadRegister(operands[2])
+        returnstring += " 00000000"
+    else: #SUB [REGISTER] [REGISTER] [CONSTANT]
+        returnstring += " 011 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += "000 "
+        returnstring += toBinary(operands[2])
+
+    return returnstring;
 def lsh(operands): #LSH
-    return "empty";
+    returnstring = "001 100 "
+    returnstring += matchWriteRegister(operands[0]) + " "
+    returnstring += matchReadRegister(operands[1])
+    returnstring += " 000 00000000"
+    return returnstring
 def rsh(operands): #RSH
-    return "empty";
+    returnstring = "001 101 "
+    returnstring += matchWriteRegister(operands[0]) + " "
+    returnstring += matchReadRegister(operands[1])
+    returnstring += " 000 00000000"
+    return returnstring
 def andString(operands): #AND (and is a reserved word)
-    return "empty";
+    returnstring = "010"
+    wregister = matchWriteRegister(operands[0])
+    rregister = matchReadRegister(operands[1])
+
+    if (operands[2] in REGISTERS): #ADD [REGISTER] [REGISTER] [REGISTER]
+        returnstring += " 000 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += matchReadRegister(operands[2])
+        returnstring += " 00000000"
+    else: #ADD [REGISTER] [REGISTER] [CONSTANT]
+        returnstring += " 001 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += "000 "
+        returnstring += toBinary(operands[2])
+
+    return returnstring;
 def orString(operands): #OR (or is a reserved word)
     return "empty";
 def notString(operands): #NOT (not is a reserved word)
@@ -165,6 +222,8 @@ def pcl(operands): #eq
     return "empty";
 def ldi(operands): #eq
     return "empty";
+def jz(operands):
+    return 0; #JZ
 def nop(operands): #eq
     return "empty";
 def ocl(operands): #eq
