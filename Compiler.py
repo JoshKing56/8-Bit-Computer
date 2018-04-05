@@ -1,5 +1,11 @@
 ## THIS IS A WIP, DON'T RUN
 
+# Usage:
+#
+#         python3 Compiler.py [filename.asm]
+#
+
+
 import sys
 
 #Global Variables
@@ -19,7 +25,7 @@ def main(): #Main method
     for command in allCommands:
         binaryStrings.append(returnBinary(command))#populates binaryStrings
 
-    print("\n\n")
+    print("\n")
     x=0
     for i in binaryStrings:
         printstring = ""
@@ -29,7 +35,7 @@ def main(): #Main method
             printstring = i
         print(printstring)
         x+=1
-    print("\n\n")
+    print("\n")
 
     return 0;
 
@@ -53,8 +59,42 @@ def returnBinary(commandLine):
 
     if (opcode=="LD"):
         returnstring = ld(operands)
+    elif (opcode=="CLR"):
+        returnstring = clr(operands)
+    elif (opcode=="JZ"):
+        returnstring = jz(operands)
+    elif (opcode=="ADD"):
+        returnstring = add(operands)
+    elif (opcode=="SUB"):
+        returnstring = sub(operands)
+    elif (opcode=="LSH"):
+        returnstring = lsh(operands)
+    elif (opcode=="RSH"):
+        returnstring = rsh(operands)
+    elif (opcode=="AND"):
+        returnstring = andString(operands)
+    elif (opcode=="OR"):
+        returnstring = orString(operands)
+    elif (opcode=="NOT"):
+        returnstring = notString(operands)
+    elif (opcode=="GR"):
+        returnstring = gr(operands)
+    elif (opcode=="GEQ"):
+        returnstring = geq(operands)
+    elif (opcode=="EQ"):
+        returnstring = eq(operands)
+    elif (opcode=="PCU"):
+        returnstring = pcu(operands)
+    elif (opcode=="PCL"):
+        returnstring = pcl(operands)
+    elif (opcode=="LDI"):
+        returnstring = ldi(operands)
+    elif (opcode=="NOP"):
+        returnstring = nop(operands)
+    elif (opcode=="OCL"):
+        returnstring = ocl(operands)
     else:
-        print("Not LD")
+        print("Error: 5")
 
     return returnstring
 
@@ -95,7 +135,40 @@ def ld(operands): #LD
             returnstring += "Error: 4"
 
     return returnstring
-
+def clr(operands): #CLR
+    return "000 100 0000 000 000 00000000"
+def jz(operands):
+    return 0; #JZ
+def add(operands): #ADD
+    return 0;
+def sub(operands): #SUB
+    return "empty";
+def lsh(operands): #LSH
+    return "empty";
+def rsh(operands): #RSH
+    return "empty";
+def andString(operands): #AND (and is a reserved word)
+    return "empty";
+def orString(operands): #OR (or is a reserved word)
+    return "empty";
+def notString(operands): #NOT (not is a reserved word)
+    return "empty";
+def gr(operands): #GR
+    return "empty";
+def geq(operands): #GEQ
+    return "empty";
+def eq(operands): #eq
+    return "empty";
+def pcu(operands): #eq
+    return "empty";
+def pcl(operands): #eq
+    return "empty";
+def ldi(operands): #eq
+    return "empty";
+def nop(operands): #eq
+    return "empty";
+def ocl(operands): #eq
+    return "empty";
 
 #Support functions
 def toHex(binary): #Converts binary number to Hex
