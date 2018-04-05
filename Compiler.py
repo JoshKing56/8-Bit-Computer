@@ -137,10 +137,19 @@ def ld(operands): #LD
     return returnstring
 def clr(operands): #CLR
     return "000 100 0000 000 000 00000000"
-def jz(operands):
-    return 0; #JZ
 def add(operands): #ADD
-    return 0;
+    returnstring = "001"
+    wregister = matchWriteRegister(operands[0])
+    rregister = matchReadRegister(operands[1])
+
+    if (operands[2] in REGISTERS): #ADD [REGISTER] [REGISTER] [REGISTER]
+        returnstring += " 000 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += matchReadRegister(operands[2])
+        returnstring += " 00000000"
+    
+    return returnstring;
 def sub(operands): #SUB
     return "empty";
 def lsh(operands): #LSH
@@ -165,6 +174,8 @@ def pcl(operands): #eq
     return "empty";
 def ldi(operands): #eq
     return "empty";
+def jz(operands):
+    return 0; #JZ
 def nop(operands): #eq
     return "empty";
 def ocl(operands): #eq
