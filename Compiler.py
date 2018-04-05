@@ -29,6 +29,7 @@ def main(): #Main method
     printBinary(binaryStrings)
     print("\n")
     printHex(binaryStrings)
+    writeHex(binaryStrings)
 
     return 0;
 
@@ -112,6 +113,19 @@ def printHex(binaryStrings):
             printstring = toHex(i.replace(" ",""))
         print(printstring)
         x+=1
+def writeHex(binaryStrings):
+    writefile = "hexOutput.hex"
+    file = open(writefile,"w")
+    x=0
+    for i in binaryStrings:
+        printstring = ""
+        if (LINENUM):
+            file.write(str(x) + " | " + toHex(i))
+        else:
+            file.write(toHex(i.replace(" ","")) + "\n")
+        print(printstring)
+        x+=1
+    file.close()
 
 
 #Operations
