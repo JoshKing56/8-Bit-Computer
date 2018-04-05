@@ -300,13 +300,13 @@ def ocl(operands): #eq
 #Support functions
 def toHex(binary): #Converts binary number to Hex
     unformatted = hex(int(str(binary),2)) #Converts number to base 2, then turns into hex
-    unformatted = unformatted[2:len(unformatted)-1] #Chops off the first two characters, '0x'
+    unformatted = unformatted[2:len(unformatted)] #Chops off the first two characters, '0x'
     while (len(unformatted)<6):
         unformatted = "0" + unformatted
     return str(unformatted)
 def toBinary(decimal): #Converts decimal into binary
     unformatted = bin(int(decimal))
-    unformatted = unformatted[2:len(unformatted)-1] #Chops off the first two characters, '0b'
+    unformatted = unformatted[2:len(unformatted)] #Chops off the first two characters, '0b'
     while (len(unformatted)<8):
         unformatted = "0" + unformatted
     return str(unformatted)
