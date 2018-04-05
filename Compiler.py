@@ -118,12 +118,12 @@ def ld(operands): #LD
             returnstring += " 000" #readregister
             returnstring += " 000 " #not used
             returnstring += str(operands[1][1:len(operands[1])]) #RAM address
-        else:
+        else: #LD [REGISTER] [CONSTANT]
             returnstring += "011 " #subopcode
             returnstring += writeregister #writeregister
             returnstring += " 000" #readregister
             returnstring += " 000 " #not used
-            returnstring += toBinary(operands[1]) #RAM address
+            returnstring += toBinary(operands[1]) #Constant
 
     elif (operands[0][0:1]=="&"):## LD RAM [REGISTER]
         returnstring += "010 0000 "
@@ -148,7 +148,13 @@ def add(operands): #ADD
         returnstring += rregister + " "
         returnstring += matchReadRegister(operands[2])
         returnstring += " 00000000"
-    
+    else: #ADD [REGISTER] [REGISTER] [CONSTANT]
+        returnstring += " 001 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += "000 "
+        returnstring += toBinary(operands[2])
+
     return returnstring;
 def sub(operands): #SUB
     return "empty";
