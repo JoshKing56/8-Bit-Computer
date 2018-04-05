@@ -157,7 +157,24 @@ def add(operands): #ADD
 
     return returnstring;
 def sub(operands): #SUB
-    return "empty";
+    returnstring = "001"
+    wregister = matchWriteRegister(operands[0])
+    rregister = matchReadRegister(operands[1])
+
+    if (operands[2] in REGISTERS): #ADD [REGISTER] [REGISTER] [REGISTER]
+        returnstring += " 010 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += matchReadRegister(operands[2])
+        returnstring += " 00000000"
+    else: #ADD [REGISTER] [REGISTER] [CONSTANT]
+        returnstring += " 011 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += "000 "
+        returnstring += toBinary(operands[2])
+
+    return returnstring;
 def lsh(operands): #LSH
     return "empty";
 def rsh(operands): #RSH
