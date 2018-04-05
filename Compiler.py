@@ -14,7 +14,7 @@ WRITE = ["1000","0100","0010","0001"]
 READ = ["010", "001", "011", "100"] #Order is A, B, C, D
 
 #Boolean to control if line numbers are printed
-LINENUM = True
+LINENUM = False
 
 #main methods
 def main(): #Main method
