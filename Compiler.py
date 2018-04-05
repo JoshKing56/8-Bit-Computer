@@ -116,6 +116,7 @@ def printHex(binaryStrings):
 def writeHex(binaryStrings):
     writefile = "hexOutput.hex"
     file = open(writefile,"w")
+    file.write("v2.0 raw\n\n")
     x=0
     for i in binaryStrings:
         printstring = ""
