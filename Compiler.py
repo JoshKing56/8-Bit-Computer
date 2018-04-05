@@ -14,7 +14,7 @@ WRITE = ["1000","0100","0010","0001"]
 READ = ["010", "001", "011", "100"] #Order is A, B, C, D
 
 #Boolean to control if line numbers are printed
-LINENUM = False
+LINENUM = True
 
 #main methods
 def main(): #Main method
@@ -96,8 +96,10 @@ def printBinary(binaryStrings):
     print("Binary: ")
     for i in binaryStrings:
         printstring = ""
-        if (LINENUM):
+        if (LINENUM and x<10):
             printstring = str(x) + " | " + i
+        elif (LINENUM and x>=10):
+            printstring = str(x) + "| " + i
         else:
             printstring = i
         print(printstring)
@@ -107,8 +109,10 @@ def printHex(binaryStrings):
     print("Hex: ")
     for i in binaryStrings:
         printstring = ""
-        if (LINENUM):
-            printstring = str(x) + " | " + toHex(i)
+        if (LINENUM and x<10):
+            printstring = str(x) + " | " + toHex(i.replace(" ",""))
+        elif (LINENUM and x>=10):
+            printstring = str(x) + "| " + toHex(i.replace(" ",""))
         else:
             printstring = toHex(i.replace(" ",""))
         print(printstring)
@@ -121,7 +125,7 @@ def writeHex(binaryStrings):
     for i in binaryStrings:
         printstring = ""
         if (LINENUM):
-            file.write(str(x) + " | " + toHex(i))
+            file.write(str(x) + " | " + toHex(i.replace(" ","")))
         else:
             file.write(toHex(i.replace(" ","")) + "\n")
         print(printstring)
@@ -160,7 +164,7 @@ def ld(operands): #LD
         if (operands[1] in REGISTERS):
             returnstring += matchReadRegister(operands[1])
             returnstring += " 000 "
-            # returnstring += toBinary(str(operands[0][1:len(operands[0])]))
+            returnstring += toBinary(str(operands[0][1:len(operands[0])]))
         else:
             returnstring += "Error: 4"
 
@@ -237,9 +241,43 @@ def andString(operands): #AND (and is a reserved word)
 
     return returnstring;
 def orString(operands): #OR (or is a reserved word)
-    return "empty";
+    returnstring = "010"
+    wregister = matchWriteRegister(operands[0])
+    rregister = matchReadRegister(operands[1])
+
+    if (operands[2] in REGISTERS): #ADD [REGISTER] [REGISTER] [REGISTER]
+        returnstring += " 010 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += matchReadRegister(operands[2])
+        returnstring += " 00000000"
+    else: #ADD [REGISTER] [REGISTER] [CONSTANT]
+        returnstring += " 100 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += "000 "
+        returnstring += toBinary(operands[2])
+
+    return returnstring;
 def notString(operands): #NOT (not is a reserved word)
-    return "empty";
+    returnstring = "010"
+    wregister = matchWriteRegister(operands[0])
+    rregister = matchReadRegister(operands[1])
+
+    if (operands[2] in REGISTERS): #ADD [REGISTER] [REGISTER] [REGISTER]
+        returnstring += " 101 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += matchReadRegister(operands[2])
+        returnstring += " 00000000"
+    else: #ADD [REGISTER] [REGISTER] [CONSTANT]
+        returnstring += " 110 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += "000 "
+        returnstring += toBinary(operands[2])
+
+    return returnstring;
 def gr(operands): #GR
     return "empty";
 def geq(operands): #GEQ
