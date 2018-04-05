@@ -188,7 +188,24 @@ def rsh(operands): #RSH
     returnstring += " 000 00000000"
     return returnstring
 def andString(operands): #AND (and is a reserved word)
-    return "empty";
+    returnstring = "010"
+    wregister = matchWriteRegister(operands[0])
+    rregister = matchReadRegister(operands[1])
+
+    if (operands[2] in REGISTERS): #ADD [REGISTER] [REGISTER] [REGISTER]
+        returnstring += " 000 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += matchReadRegister(operands[2])
+        returnstring += " 00000000"
+    else: #ADD [REGISTER] [REGISTER] [CONSTANT]
+        returnstring += " 001 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += "000 "
+        returnstring += toBinary(operands[2])
+
+    return returnstring;
 def orString(operands): #OR (or is a reserved word)
     return "empty";
 def notString(operands): #NOT (not is a reserved word)
