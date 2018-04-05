@@ -14,7 +14,7 @@ WRITE = ["1000","0100","0010","0001"]
 READ = ["010", "001", "011", "100"] #Order is A, B, C, D
 
 #Boolean to control if line numbers are printed
-LINENUM = True
+LINENUM = False
 
 #main methods
 def main(): #Main method
@@ -26,16 +26,9 @@ def main(): #Main method
         binaryStrings.append(returnBinary(command))#populates binaryStrings
 
     print("\n")
-    x=0
-    for i in binaryStrings:
-        printstring = ""
-        if (LINENUM):
-            printstring = str(x) + " | " + i
-        else:
-            printstring = i
-        print(printstring)
-        x+=1
+    printBinary(binaryStrings)
     print("\n")
+    printHex(binaryStrings)
 
     return 0;
 
@@ -97,6 +90,28 @@ def returnBinary(commandLine):
         print("Error: 5")
 
     return returnstring
+def printBinary(binaryStrings):
+    x=0
+    print("Binary: ")
+    for i in binaryStrings:
+        printstring = ""
+        if (LINENUM):
+            printstring = str(x) + " | " + i
+        else:
+            printstring = i
+        print(printstring)
+        x+=1
+def printHex(binaryStrings):
+    x=0
+    print("Hex: ")
+    for i in binaryStrings:
+        printstring = ""
+        if (LINENUM):
+            printstring = str(x) + " | " + toHex(i)
+        else:
+            printstring = toHex(i.replace(" ",""))
+        print(printstring)
+        x+=1
 
 
 #Operations
@@ -117,7 +132,7 @@ def ld(operands): #LD
             returnstring += writeregister #writeregister
             returnstring += " 000" #readregister
             returnstring += " 000 " #not used
-            returnstring += str(operands[1][1:len(operands[1])]) #RAM address
+            returnstring += toBinary(str(operands[1][1:len(operands[1])])) #RAM address
         else: #LD [REGISTER] [CONSTANT]
             returnstring += "011 " #subopcode
             returnstring += writeregister #writeregister
@@ -130,7 +145,7 @@ def ld(operands): #LD
         if (operands[1] in REGISTERS):
             returnstring += matchReadRegister(operands[1])
             returnstring += " 000 "
-            returnstring += str(operands[0][1:len(operands[0])])
+            # returnstring += toBinary(str(operands[0][1:len(operands[0])]))
         else:
             returnstring += "Error: 4"
 
@@ -232,7 +247,10 @@ def ocl(operands): #eq
 #Support functions
 def toHex(binary): #Converts binary number to Hex
     unformatted = hex(int(str(binary),2)) #Converts number to base 2, then turns into hex
-    return unformatted[2:len(unformatted)-1] #Chops off the first two characters, '0x'
+    unformatted = unformatted[2:len(unformatted)-1] #Chops off the first two characters, '0x'
+    while (len(unformatted)<6):
+        unformatted = "0" + unformatted
+    return str(unformatted)
 def toBinary(decimal): #Converts decimal into binary
     unformatted = bin(int(decimal))
     unformatted = unformatted[2:len(unformatted)-1] #Chops off the first two characters, '0b'
