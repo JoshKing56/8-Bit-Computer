@@ -161,13 +161,13 @@ def sub(operands): #SUB
     wregister = matchWriteRegister(operands[0])
     rregister = matchReadRegister(operands[1])
 
-    if (operands[2] in REGISTERS): #ADD [REGISTER] [REGISTER] [REGISTER]
+    if (operands[2] in REGISTERS): #SUB [REGISTER] [REGISTER] [REGISTER]
         returnstring += " 010 "
         returnstring += wregister + " "
         returnstring += rregister + " "
         returnstring += matchReadRegister(operands[2])
         returnstring += " 00000000"
-    else: #ADD [REGISTER] [REGISTER] [CONSTANT]
+    else: #SUB [REGISTER] [REGISTER] [CONSTANT]
         returnstring += " 011 "
         returnstring += wregister + " "
         returnstring += rregister + " "
@@ -176,9 +176,17 @@ def sub(operands): #SUB
 
     return returnstring;
 def lsh(operands): #LSH
-    return "empty";
+    returnstring = "001 100 "
+    returnstring += matchWriteRegister(operands[0]) + " "
+    returnstring += matchReadRegister(operands[1])
+    returnstring += " 000 00000000"
+    return returnstring
 def rsh(operands): #RSH
-    return "empty";
+    returnstring = "001 101 "
+    returnstring += matchWriteRegister(operands[0]) + " "
+    returnstring += matchReadRegister(operands[1])
+    returnstring += " 000 00000000"
+    return returnstring
 def andString(operands): #AND (and is a reserved word)
     return "empty";
 def orString(operands): #OR (or is a reserved word)
