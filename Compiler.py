@@ -252,7 +252,7 @@ def orString(operands): #OR (or is a reserved word)
         returnstring += matchReadRegister(operands[2])
         returnstring += " 00000000"
     else: #ADD [REGISTER] [REGISTER] [CONSTANT]
-        returnstring += " 100 "
+        returnstring += " 011 "
         returnstring += wregister + " "
         returnstring += rregister + " "
         returnstring += "000 "
@@ -262,20 +262,18 @@ def orString(operands): #OR (or is a reserved word)
 def notString(operands): #NOT (not is a reserved word)
     returnstring = "010"
     wregister = matchWriteRegister(operands[0])
-    rregister = matchReadRegister(operands[1])
 
-    if (operands[2] in REGISTERS): #ADD [REGISTER] [REGISTER] [REGISTER]
-        returnstring += " 101 "
+    if (operands[1] in REGISTERS): #ADD [REGISTER] [REGISTER] [REGISTER]
+        returnstring += " 100 "
         returnstring += wregister + " "
-        returnstring += rregister + " "
-        returnstring += matchReadRegister(operands[2])
+        returnstring += " 000 "
+        returnstring += matchReadRegister(operands[1]) + " "
         returnstring += " 00000000"
     else: #ADD [REGISTER] [REGISTER] [CONSTANT]
-        returnstring += " 110 "
+        returnstring += " 101 "
         returnstring += wregister + " "
-        returnstring += rregister + " "
-        returnstring += "000 "
-        returnstring += toBinary(operands[2])
+        returnstring += "000 000 "
+        returnstring += toBinary(operands[1])
 
     return returnstring;
 def gr(operands): #GR
