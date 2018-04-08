@@ -14,7 +14,7 @@ WRITE = ["1000","0100","0010","0001"]
 READ = ["010", "001", "011", "100"] #Order is A, B, C, D
 
 #Boolean to control if line numbers are printed
-LINENUM = False
+LINENUM = True
 
 #main methods
 def main(): #Main method
@@ -124,10 +124,7 @@ def writeHex(binaryStrings):
     x=0
     for i in binaryStrings:
         printstring = ""
-        if (LINENUM):
-            file.write(str(x) + " | " + toHex(i.replace(" ","")))
-        else:
-            file.write(toHex(i.replace(" ","")) + "\n")
+        file.write(toHex(i.replace(" ","")) + "\n")
         print(printstring)
         x+=1
     file.close()
