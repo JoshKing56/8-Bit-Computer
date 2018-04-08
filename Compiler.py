@@ -55,8 +55,8 @@ def returnBinary(commandLine):
         returnstring = ld(operands)
     elif (opcode=="CLR"):
         returnstring = clr(operands)
-    elif (opcode=="JZ"):
-        returnstring = jz(operands)
+    elif (opcode=="JNZ"):
+        returnstring = jnz(operands)
     elif (opcode=="ADD"):
         returnstring = add(operands)
     elif (opcode=="SUB"):
@@ -277,23 +277,83 @@ def notString(operands): #NOT (not is a reserved word)
 
     return returnstring;
 def gr(operands): #GR
-    return "empty";
+    returnstring = "011"
+    wregister = matchWriteRegister(operands[0])
+    rregister = matchReadRegister(operands[1])
+
+    if (operands[2] in REGISTERS): #ADD [REGISTER] [REGISTER] [REGISTER]
+        returnstring += " 000 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += matchReadRegister(operands[2])
+        returnstring += " 00000000"
+    else: #ADD [REGISTER] [REGISTER] [CONSTANT]
+        returnstring += " 001 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += "000 "
+        returnstring += toBinary(operands[2])
+
+    return returnstring;
 def geq(operands): #GEQ
-    return "empty";
+    returnstring = "011"
+    wregister = matchWriteRegister(operands[0])
+    rregister = matchReadRegister(operands[1])
+
+    if (operands[2] in REGISTERS): #ADD [REGISTER] [REGISTER] [REGISTER]
+        returnstring += " 010 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += matchReadRegister(operands[2])
+        returnstring += " 00000000"
+    else: #ADD [REGISTER] [REGISTER] [CONSTANT]
+        returnstring += " 011 "
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += "000 "
+        returnstring += toBinary(operands[2])
+
+    return returnstring;
 def eq(operands): #eq
-    return "empty";
+    returnstring = "011"
+    wregister = matchWriteRegister(operands[0])
+
+    if (operands[1] in REGISTERS): #ADD [REGISTER] [REGISTER]
+        returnstring += " 100 "
+        returnstring += wregister +" "
+        returnstring += matchReadRegister(operands[1])
+        returnstring += " 000"
+        returnstring += " 00000000"
+    else: #ADD [REGISTER] [CONSTANT]
+        returnstring += " 101 "
+        returnstring += wregister + " "
+        returnstring += "000 000 "
+        returnstring += toBinary(operands[1])
+
+    return returnstring;
 def pcu(operands): #eq
-    return "empty";
+    returnstring = "100 000 0000 000 000 "
+    returnstring += toBinary(operands[0])
+    return returnstring;
 def pcl(operands): #eq
-    return "empty";
+    returnstring = "100 001 0000 000 000 "
+    returnstring += toBinary(operands[0])
+    return returnstring;
 def ldi(operands): #eq
-    return "empty";
-def jz(operands):
-    return 0; #JZ
+    return "100 001 0000 000 000 00000000"
+def jnz(operands):
+    returnstring = "100 011 0000 "
+    returnstring += matchReadRegister(operands[0])
+    returnstring += " 000 "
+    returnstring += toBinary(operands[1]) + " "
+    return returnstring;
 def nop(operands): #eq
-    return "empty";
+    return "100 100 0000 000 000 00000000"
 def ocl(operands): #eq
-    return "empty";
+    returnstring = "100 101 0000 "
+    returnstring += toBinarySixLong(operands[0]) + " "
+    returnstring += toBinary(operands[1])
+    return returnstring
 
 #Support functions
 def toHex(binary): #Converts binary number to Hex
@@ -306,6 +366,13 @@ def toBinary(decimal): #Converts decimal into binary
     unformatted = bin(int(decimal))
     unformatted = unformatted[2:len(unformatted)] #Chops off the first two characters, '0b'
     while (len(unformatted)<8):
+        unformatted = "0" + unformatted
+    return str(unformatted)
+
+def toBinarySixLong(decimal):
+    unformatted = bin(int(decimal))
+    unformatted = unformatted[2:len(unformatted)] #Chops off the first two characters, '0b'
+    while (len(unformatted)<6):
         unformatted = "0" + unformatted
     return str(unformatted)
 
