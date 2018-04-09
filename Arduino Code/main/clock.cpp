@@ -1,7 +1,8 @@
 
-#include "Arduino.h"
-#include "clock.h"
 
+#include "Arduino.h"
+#include "pins.h"
+#include "clock.h"
 
 
 
@@ -38,8 +39,8 @@ void display_clock_ISR()
 
 void attach_timers() {
 
-  pinMode(system_clock_pin, OUTPUT);
-  pinMode(display_clock_pin, OUTPUT);
+  pinMode(SYSTEM_CLOCK_PIN, OUTPUT);
+  pinMode(DISPLAY_CLOCK_PIN, OUTPUT);
 
   Timer1.initialize(1000000/DEFAULT_SYSTEM_FREQ); // set a timer of length 10 microseconds (or 100,000Hz)
   Timer1.attachInterrupt( main_clock_ISR ); // attach the service routine here
