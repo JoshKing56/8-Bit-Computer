@@ -2,16 +2,7 @@
 #include "Arduino.h"
 #include "clock.h"
 
-#define system_clock_pin 13
-#define display_clock_pin 12
 
-#define SYSTEM_PORT PORTB
-#define DISPLAY_PORT PORTB
-
-#define SYSTEM_PORT_MASK_HIGH B10000000
-#define SYSTEM_PORT_MASK_LOW B01111111
-#define DISPLAY_PORT_MASK_HIGH B01000000
-#define DISPLAY_PORT_MASK_LOW B10111111
 
 
 void main_clock_ISR()
