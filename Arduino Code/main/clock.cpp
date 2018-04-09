@@ -22,7 +22,7 @@ void main_clock_ISR()
 
 void display_clock_ISR()
 {
-  static byte display_clock_flag =0;
+  static byte display_clock_flag = 0;
   // Toggle Pin
   //
   if (display_clock_flag == 1) { //If pin on.
@@ -36,16 +36,45 @@ void display_clock_ISR()
 }
 
 
-void attach_timers(){
-  
-  // Initialize the digital pin as an output.
-  // Pin 13 has an LED connected on most Arduino boards
-  pinMode(system_clock_pin, OUTPUT);
+void attach_timers() {
 
-  Timer1.initialize(100); // set a timer of length 10 microseconds (or 100,000Hz)
+  pinMode(system_clock_pin, OUTPUT);
+  pinMode(display_clock_pin, OUTPUT);
+
+  Timer1.initialize(1000000/DEFAULT_SYSTEM_FREQ); // set a timer of length 10 microseconds (or 100,000Hz)
   Timer1.attachInterrupt( main_clock_ISR ); // attach the service routine here
 
-  pinMode(display_clock_pin, OUTPUT);
-  Timer3.initialize(30);
+  Timer3.initialize(1000000/DEFAULT_DISPLAY_FREQ);
   Timer3.attachInterrupt(display_clock_ISR);
+}
+
+void set_system_frequency() {
+  int freq;
+  switch (frequency_method()){
+  case 1:   freq = reading_to_freq(read_ocl_register());  break;  
+  case 2:   freq = reading_to_freq(read_analog_input());  break;
+  case 3:   freq = reading_to_freq(read_com_port());      break;
+  default:  freq = DEFAULT_SYSTEM_FREQ;
   }
+  Timer1.setPeriod(1000000/freq);
+}
+
+
+
+byte frequency_method() {
+  if (digitalRead(FREQ_METHOD_SWITCH1) && digitalRead(FREQ_METHOD_SWITCH2)) { //both high
+    return (1);
+  }
+  else if ((digitalRead(FREQ_METHOD_SWITCH1) && !digitalRead(FREQ_METHOD_SWITCH2)) || (!digitalRead(FREQ_METHOD_SWITCH1) && digitalRead(FREQ_METHOD_SWITCH2))) { //different
+    return (2);
+  }
+
+  else if (!digitalRead(FREQ_METHOD_SWITCH1) && !FREQ_METHOD_SWITCH2) { // both low
+    return (3);
+  }
+  else return (4);  //error
+}
+uint16_t read_ocl_register(){}
+uint16_t read_analog_input(){}
+uint16_t read_com_port(){}
+int reading_to_freq(uint16_t reading){}
