@@ -339,7 +339,7 @@ def pcl(operands): #eq
     returnstring += toBinary(operands[0])
     return returnstring;
 def ldi(operands): #eq
-    return "100 001 0000 000 000 00000000"
+    return "100 010 0000 000 000 00000000"
 def jnz(operands):
     returnstring = "100 011 0000 "
     returnstring += matchReadRegister(operands[0])
