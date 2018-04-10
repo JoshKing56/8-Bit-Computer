@@ -42,5 +42,6 @@
   * Timing? 
   * Feed back from load
   * Run through ROM at end and check every command
+*Uno based clock can only do 83kHz, is this fast enough
   
 ## Memory ## 
