@@ -314,18 +314,20 @@ def geq(operands): #GEQ
 def eq(operands): #eq
     returnstring = "011"
     wregister = matchWriteRegister(operands[0])
+    rregister = matchReadRegister(operands[1])
 
-    if (operands[1] in REGISTERS): #ADD [REGISTER] [REGISTER]
+    if (operands[2] in REGISTERS): #ADD [REGISTER] [REGISTER] [REGISTER]
         returnstring += " 100 "
-        returnstring += wregister +" "
-        returnstring += matchReadRegister(operands[1])
-        returnstring += " 000"
+        returnstring += wregister + " "
+        returnstring += rregister + " "
+        returnstring += matchReadRegister(operands[2])
         returnstring += " 00000000"
-    else: #ADD [REGISTER] [CONSTANT]
+    else: #ADD [REGISTER] [REGISTER][CONSTANT]
         returnstring += " 101 "
         returnstring += wregister + " "
-        returnstring += "000 000 "
-        returnstring += toBinary(operands[1])
+        returnstring += rregister + " "
+        returnstring += "000 "
+        returnstring += toBinary(operands[2])
 
     return returnstring;
 def pcu(operands): #eq
