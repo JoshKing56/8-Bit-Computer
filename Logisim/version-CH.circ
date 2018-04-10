@@ -2273,7 +2273,8 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="addrWidth" val="16"/>
       <a name="dataWidth" val="24"/>
       <a name="contents">addr/data: 16 24
-9c0000 79*0 9c0000
+e003e d002d c800f c4057 620b00 66086d 6a0b00 6e086d
+720800 76006d 80006d 84006d 840000 8c106d 900000 940b6d
 </a>
     </comp>
   </circuit>
@@ -8114,7 +8115,6 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <wire from="(620,340)" to="(810,340)"/>
     <wire from="(500,100)" to="(500,110)"/>
     <wire from="(770,280)" to="(830,280)"/>
-    <wire from="(720,830)" to="(780,830)"/>
     <wire from="(540,270)" to="(580,270)"/>
     <wire from="(700,390)" to="(740,390)"/>
     <wire from="(700,270)" to="(740,270)"/>
@@ -8204,7 +8204,6 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <wire from="(450,260)" to="(510,260)"/>
     <wire from="(690,280)" to="(690,480)"/>
     <wire from="(560,590)" to="(740,590)"/>
-    <wire from="(720,820)" to="(770,820)"/>
     <wire from="(780,400)" to="(780,410)"/>
     <wire from="(890,700)" to="(950,700)"/>
     <wire from="(790,200)" to="(790,270)"/>
