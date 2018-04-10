@@ -25,8 +25,8 @@ void set_pins() { //setup all other pins
   pinMode(FREQ_METHOD_SWITCH2, INPUT);
 
   pinMode(ANALOG_POT_PIN, INPUT);
-  int i;
   
+  int i;
   for (i = 0; i < 8; i++)
     pinMode(ROM_BYTE_1_PIN_0 + i, OUTPUT);
 
@@ -39,6 +39,7 @@ void set_pins() { //setup all other pins
   for (i = 0; i < 14; i++)
     pinMode(OCL_REGISTER_PIN_0 + i, INPUT);
 
-    
+  for (i = 0; i < 10; i++)
+    pinMode(ROM_ADDRESS_PIN_0 + i, OUTPUT);
 }
 

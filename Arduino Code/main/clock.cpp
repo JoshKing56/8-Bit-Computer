@@ -75,7 +75,19 @@ byte frequency_method() {
   }
   else return (4);  //error
 }
-uint16_t read_ocl_register(){}
-uint16_t read_analog_input(){}
+
+uint16_t read_ocl_register(){
+
+  byte i, val; 
+  uint16_t reg_reading=0;
+  for(i=0; i<14;i++){
+    val = digitalRead(OCL_REGISTER_PIN_0+i);  //read input
+    reg_reading += val<<i;       // shift value based on pin being read
+  }
+  return (reg_reading);
+  }
+uint16_t read_analog_input(){
+  return(analogRead(ANALOG_POT_PIN)<<4);//map 10 bit reading to 14 bit  
+  }
 uint16_t read_com_port(){}
 int reading_to_freq(uint16_t reading){}
