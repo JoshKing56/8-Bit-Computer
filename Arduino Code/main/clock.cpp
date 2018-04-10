@@ -42,22 +42,22 @@ void attach_timers() {
   pinMode(SYSTEM_CLOCK_PIN, OUTPUT);
   pinMode(DISPLAY_CLOCK_PIN, OUTPUT);
 
-  Timer1.initialize(1000000/DEFAULT_SYSTEM_FREQ); // set a timer of length 10 microseconds (or 100,000Hz)
+  Timer1.initialize(1000000 / DEFAULT_SYSTEM_FREQ); // set a timer of length 10 microseconds (or 100,000Hz)
   Timer1.attachInterrupt( main_clock_ISR ); // attach the service routine here
 
-  Timer3.initialize(1000000/DEFAULT_DISPLAY_FREQ);
+  Timer3.initialize(1000000 / DEFAULT_DISPLAY_FREQ);
   Timer3.attachInterrupt(display_clock_ISR);
 }
 
 void set_system_frequency() {
   int freq;
-  switch (frequency_method()){
-  case 1:   freq = reading_to_freq(read_ocl_register());  break;  
-  case 2:   freq = reading_to_freq(read_analog_input());  break;
-  case 3:   freq = reading_to_freq(read_com_port());      break;
-  default:  freq = DEFAULT_SYSTEM_FREQ;
+  switch (frequency_method()) {
+    case 1:   freq = reading_to_freq(read_ocl_register());  break;
+    case 2:   freq = reading_to_freq(read_analog_input());  break;
+    case 3:   freq = reading_to_freq(read_com_port());      break;
+    default:  freq = DEFAULT_SYSTEM_FREQ;
   }
-  Timer1.setPeriod(1000000/freq);
+  Timer1.setPeriod(1000000 / freq);
 }
 
 
@@ -76,18 +76,30 @@ byte frequency_method() {
   else return (4);  //error
 }
 
-uint16_t read_ocl_register(){
+uint16_t read_ocl_register() {
 
-  byte i, val; 
-  uint16_t reg_reading=0;
-  for(i=0; i<14;i++){
-    val = digitalRead(OCL_REGISTER_PIN_0+i);  //read input
-    reg_reading += val<<i;       // shift value based on pin being read
+  byte i, val;
+  uint16_t reg_reading = 0;
+  for (i = 0; i < 14; i++) {
+    val = digitalRead(OCL_REGISTER_PIN_0 + i); //read input
+    reg_reading += val << i;     // shift value based on pin being read
   }
   return (reg_reading);
+}
+uint16_t read_analog_input() {
+  return (analogRead(ANALOG_POT_PIN) << 4); //map 10 bit reading to 14 bit
+}
+
+uint16_t read_com_port() {
+  
   }
-uint16_t read_analog_input(){
-  return(analogRead(ANALOG_POT_PIN)<<4);//map 10 bit reading to 14 bit  
-  }
-uint16_t read_com_port(){}
-int reading_to_freq(uint16_t reading){}
+
+  
+int reading_to_freq(uint16_t reading) {
+
+  if (reading < 256)     //slow reading
+    return (map(reading, 1, 256, 0.2, 50));  //steps of 0.2ish Hz
+ 
+  else    //fast reading
+    return (map(reading, 257, 16384, 50, 250000));  // steps of 15.6ish hz
+}
