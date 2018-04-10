@@ -1,3 +1,7 @@
+LD A 62
+LD B 45
+LD C 15
+LD D 87
 GR A B C
 GR A B 109
 GEQ A B C
