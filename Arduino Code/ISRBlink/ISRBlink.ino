@@ -3,7 +3,7 @@
 
 
 
-byte temp = 0;
+//byte temp = 0;
 void setup()
 {
   // Initialize the digital pin as an output.
@@ -27,6 +27,7 @@ void timerIsr()
 {
   // Toggle LED
   //
+  static byte temp = 0;
   if (temp == 1) { //Turn LED on.
     PORTB = B00000000; //Turn LED off.
     temp = 0;
