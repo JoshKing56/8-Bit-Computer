@@ -24,13 +24,13 @@ LD A 0          ;;Start
 LD &15 A
 LD C 0
 LD D 1
-LD A *C
-LD B *D
+LD A &C         ;;This should be an &
+LD B &D         ;;This shoudl be an &
 GR A B A        ;;Swap
 PCU NoSwap      ;;TODO: Fill
 JNZ A Noswap    ;;TODO: Fill
-LD A *D
-LD B *C
+LD A &D
+LD B &C
 LD &C A
 LD &D B
 LD A 1
@@ -40,8 +40,8 @@ PCU Esc         ;;TODO: Fill
 JNZ A Esc       ;;TODO: Fill
 LD C D
 ADD D D 1
-LD A *C
-LD B *D
+LD A &C
+LD B &D
 PCU Swap        ;;TODO: Fill
 PCU Swap        ;;TODO: Fill
 LD A &19

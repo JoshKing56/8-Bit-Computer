@@ -129,6 +129,38 @@ def writeHex(binaryStrings):
         x+=1
     file.close()
 
+#Support functions
+def toHex(binary): #Converts binary number to Hex
+unformatted = hex(int(str(binary),2)) #Converts number to base 2, then turns into hex
+unformatted = unformatted[2:len(unformatted)] #Chops off the first two characters, '0x'
+while (len(unformatted)<6):
+    unformatted = "0" + unformatted
+    return str(unformatted)
+def toBinary(decimal): #Converts decimal into binary
+unformatted = bin(int(decimal))
+unformatted = unformatted[2:len(unformatted)] #Chops off the first two characters, '0b'
+while (len(unformatted)<8):
+    unformatted = "0" + unformatted
+    return str(unformatted)
+def toBinarySixLong(decimal):
+    unformatted = bin(int(decimal))
+    unformatted = unformatted[2:len(unformatted)] #Chops off the first two characters, '0b'
+    while (len(unformatted)<6):
+        unformatted = "0" + unformatted
+        return str(unformatted)
+
+def matchWriteRegister(register): #Returns binary for register write
+    if (register=="A"): return WRITE[0]
+    if (register=="B"): return WRITE[1]
+    if (register=="C"): return WRITE[2]
+    if (register=="D"): return WRITE[3]
+    else: return "Error: 2"
+def matchReadRegister(register): #Returns binary for register read
+    if (register=="A"): return READ[0]
+    if (register=="B"): return READ[1]
+    if (register=="C"): return READ[2]
+    if (register=="D"): return READ[3]
+    else: return "Error: 3"
 
 #Operations
 def ld(operands): #LD
@@ -137,33 +169,40 @@ def ld(operands): #LD
 
     if (operands[0] in REGISTERS): #LD [REGISTER] XX
         writeregister = matchWriteRegister(operands[0])
-        if (operands[1] in REGISTERS): #LD [REGISTER] [REGISTER]
-            returnstring += "000 "  #subopcode
-            returnstring += writeregister + " " #writeregister
-            returnstring += matchReadRegister(operands[1]) #readregister
-            returnstring += " 000 " #not used
-            returnstring += "00000000" #empty constant
-        elif (operands[1][0:1]=="&"): #LD [REGISTER] [RAM]
-            returnstring += "010 " #subopcode
-            returnstring += writeregister #writeregister
-            returnstring += " 000" #readregister
-            returnstring += " 000 " #not used
-            returnstring += toBinary(str(operands[1][1:len(operands[1])])) #RAM address
-        else: #LD [REGISTER] [CONSTANT]
-            returnstring += "011 " #subopcode
-            returnstring += writeregister #writeregister
-            returnstring += " 000" #readregister
-            returnstring += " 000 " #not used
-            returnstring += toBinary(operands[1]) #Constant
+        if (operands[1][0:1]=="&"): #LD REGISTER &[SOMETHING]
+            returnstring += "001 "
+            if (operands[1][1:len(operands[1])] in REGISTERS): #LD [REGISTER] &[REGISTER]
+                returnstring += writeregister #writeregister
+                returnstring += " 000 " #not used
+                returnstring += matchReadRegister(operands[1][1:len(operands[1])) #readregister
+                returnstring += " 00000000" #empty constant
+            else: #LD [REGISTER] &[CONSTANT]
+                returnstring += writeregister
+                returnstring += "000 000"
+                returnstring += str(toBinary(operands[1][1:len(operands[1])))
+        else:  #LD [REGISTER] [SOMETHING]
+            if(operands[1] in REGISTERS): #LD [REGISTER] [REGISTER]
+                returnstring += "000 "
+                returnstring += writeregister + " "
+                returnstring += readregister + " "
+                returnstring += "000 00000000"
+            else: #LD [REGISTER] [CONSTANT]
+                returnstring += "011 "
+                returnstring += writeregister + " "
+                returnstring += "000 "
+                returnstring += str(toBinary(operands[1]))
 
-    elif (operands[0][0:1]=="&"):## LD RAM [REGISTER]
-        returnstring += "010 0000 "
-        if (operands[1] in REGISTERS):
-            returnstring += matchReadRegister(operands[1])
-            returnstring += " 000 "
-            returnstring += toBinary(str(operands[0][1:len(operands[0])]))
-        else:
-            returnstring += "Error: 4"
+    else: #LD &[SOMETHING]
+        if (operands[0][1:len(operands[0])] in REGISTERS): #LD &[REGISTER] [REGISTER]
+            returnstring += "010 000 "
+            returnstring += matchReadRegister(operands[1]) + " "
+            returnstring += matchReadRegister(operands[operands[0][1:len(operands[0])]])
+            returnstring += " 00000000"
+        else: #LD &[CONSTANT] [REGISTER]
+            returnstring += "010 "
+            returnstring += matchWriteRegister(operands[1])
+            returnstring += " 000 000 "
+            returnstring += str(toBinary(operands[operands[0][1:len(operands[0])]))
 
     return returnstring
 def clr(operands): #CLR
@@ -354,38 +393,5 @@ def ocl(operands): #eq
     returnstring += toBinary(operands[1])
     return returnstring
 
-#Support functions
-def toHex(binary): #Converts binary number to Hex
-    unformatted = hex(int(str(binary),2)) #Converts number to base 2, then turns into hex
-    unformatted = unformatted[2:len(unformatted)] #Chops off the first two characters, '0x'
-    while (len(unformatted)<6):
-        unformatted = "0" + unformatted
-    return str(unformatted)
-def toBinary(decimal): #Converts decimal into binary
-    unformatted = bin(int(decimal))
-    unformatted = unformatted[2:len(unformatted)] #Chops off the first two characters, '0b'
-    while (len(unformatted)<8):
-        unformatted = "0" + unformatted
-    return str(unformatted)
-
-def toBinarySixLong(decimal):
-    unformatted = bin(int(decimal))
-    unformatted = unformatted[2:len(unformatted)] #Chops off the first two characters, '0b'
-    while (len(unformatted)<6):
-        unformatted = "0" + unformatted
-    return str(unformatted)
-
-def matchWriteRegister(register): #Returns binary for register write
-    if (register=="A"): return WRITE[0]
-    if (register=="B"): return WRITE[1]
-    if (register=="C"): return WRITE[2]
-    if (register=="D"): return WRITE[3]
-    else: return "Error: 2"
-def matchReadRegister(register): #Returns binary for register read
-    if (register=="A"): return READ[0]
-    if (register=="B"): return READ[1]
-    if (register=="C"): return READ[2]
-    if (register=="D"): return READ[3]
-    else: return "Error: 3"
 
 main()
