@@ -1,9 +1,2 @@
-LD A 14
-LD B 17
-LD D 80
-LD &3 A
-LD &4 B
-LD C 0
-LD &C A
-LD B &C
-LD A D
+PCU 15
+PCL 10

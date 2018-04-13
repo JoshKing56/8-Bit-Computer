@@ -136,13 +136,17 @@ def toHex(binary): #Converts binary number to Hex
     while (len(unformatted)<6):
         unformatted = "0" + unformatted
     return str(unformatted)
-def toBinary(decimal): #Converts decimal into binary
-    unformatted = bin(int(decimal))
+def toBinary(decimalstring): #Converts decimal into binary
+    decimal=int(decimalstring)
+    if (decimal<0): decimal=decimal+256 #This takes into account negative numbers
+    unformatted = bin(decimal)
     unformatted = unformatted[2:len(unformatted)] #Chops off the first two characters, '0b'
     while (len(unformatted)<8):
         unformatted = "0" + unformatted
     return str(unformatted)
-def toBinarySixLong(decimal):
+def toBinarySixLong(decimalstring):
+    decimal=int(decimalstring)
+    if (decimal<0): decimal=decimal+256 #This takes into account negative numbers
     unformatted = bin(int(decimal))
     unformatted = unformatted[2:len(unformatted)] #Chops off the first two characters, '0b'
     while (len(unformatted)<6):
@@ -178,7 +182,7 @@ def ld(operands): #LD
                 returnstring += " 00000000" #empty constant
             else: #LD [REGISTER] &[CONSTANT]
                 returnstring += writeregister
-                returnstring += "000 000"
+                returnstring += " 000 000 "
                 returnstring += toBinary(operands[1][1:len(operands[1])])
         else:  #LD [REGISTER] [SOMETHING]
             if(operands[1] in REGISTERS): #LD [REGISTER] [REGISTER]
