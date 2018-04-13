@@ -1,0 +1,7 @@
+LD A 14
+LD B 17
+LD D 80
+ADD C A B
+SUB C D A
+GR D A B
+GR D B A
