@@ -13,7 +13,7 @@ For information, documentation, and examples, [check the wiki](https://github.co
 ## Authors
 
 * **Josh King** - *Developer* - [Github](https://github.com/ridgeontheway)
-* **Chris Hill** - *Archetect* - [Github](https://github.com/Chris-j-hill)
+* **Chris Hill** - *Architect* - [Github](https://github.com/Chris-j-hill)
 * **Connor Foy** - *Designer* - [Github](https://github.com/ConorFoy)
 
 ## License
