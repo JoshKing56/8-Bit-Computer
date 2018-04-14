@@ -7,5 +7,15 @@ BB8 is a fully functional, turing complete Von Neumann based archetecture design
 
 This project was inspired by, a similar project done by [Ben Eater](https://www.youtube.com/user/eaterbc)
 
-
+## How do I use this? ##
 For information, documentation, and examples, [check the wiki](https://github.com/JoshKing56/8-Bit-Computer/wiki)
+
+## Authors
+
+* **Josh King** - *Developer* - [Github](https://github.com/ridgeontheway)
+* **Chris Hill** - *Archetect* - [Github](https://github.com/Chris-j-hill)
+* **Connor Foy** - *Designer* - [Github](https://github.com/ConorFoy)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
