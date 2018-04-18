@@ -1,5 +1,4 @@
 *.tmp
 */*.tmp
 ~$*.doc*
-*.lnk
-*.hex
+.hex
