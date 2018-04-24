@@ -1,5 +1,5 @@
-## THIS IS A WIP, DON'T RUN
-
+#
+#
 # Usage:
 #
 #         python3 Compiler.py [filename.asm]
@@ -7,11 +7,15 @@
 
 
 import sys
+import re
 
 #Global Variables
 REGISTERS = ["A", "B", "C", "D"]
 WRITE = ["1000","0100","0010","0001"]
 READ = ["010", "001", "011", "100"] #Order is A, B, C, D
+SOURCELINES = []
+
+LABELTABLE = [];
 
 #Boolean to control if line numbers are printed
 LINENUM = True
@@ -20,6 +24,8 @@ LINENUM = True
 def main(): #Main method
     file = getFileName() #gets file name from args
     allCommands = openFile(file) #opens the file
+    for i in SOURCELINES:
+        print(i)
 
     binaryStrings = [] #creates new array to hold binary values
     for command in allCommands:
@@ -31,6 +37,7 @@ def main(): #Main method
     printHex(binaryStrings)
     writeHex(binaryStrings)
 
+
     return 0;
 
 def getFileName(): #Returns filename from args. TODO: Should add more checks
@@ -40,12 +47,24 @@ def getFileName(): #Returns filename from args. TODO: Should add more checks
     else:
         return sys.argv[1]
 def openFile(filename): # Opens "filename" as a file
-    linearray = []
+    linearray = [] #Creates new array of command arrays
     sourceFile = open(filename, "r")
     for line in sourceFile:
+        line = line.split(";",1)[0] #removes all comments
+        populateSourceArray(line)#output only command and not comments
+        line = line.replace("\t","TAB ")
+        #print(line.upper().split())
+        #print(re.split("[ \n]", line.upper()))
         linearray.append(line.upper().split()) #Ensures all the lines are upper case, then splits by space
     sourceFile.close()
     return linearray
+
+def populateSourceArray(line):
+    appendstring = ""
+    linecommand = line.split()
+    for i in linecommand:
+        appendstring = appendstring + i + " "
+    SOURCELINES.append(appendstring)
 def returnBinary(commandLine):
     opcode = commandLine[0]
     operands = commandLine[1:len(commandLine)] # rest of the array
