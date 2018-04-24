@@ -17,26 +17,24 @@ SOURCELINES = []
 
 LABELTABLE = [];
 
-#Boolean to control if line numbers are printed
+#Boolean to control what gets printed
 LINENUM = True
+SOURCE = True
+BINARY = True
+HEX = True
 
 #main methods
 def main(): #Main method
     file = getFileName() #gets file name from args
     allCommands = openFile(file) #opens the file
-    for i in SOURCELINES:
-        print(i)
-
+    
     binaryStrings = [] #creates new array to hold binary values
     for command in allCommands:
         binaryStrings.append(returnBinary(command))#populates binaryStrings
 
-    print("\n")
-    printBinary(binaryStrings)
-    print("\n")
-    printHex(binaryStrings)
-    writeHex(binaryStrings)
+    consolePrint(binaryStrings)
 
+    writeHex(binaryStrings)
 
     return 0;
 
@@ -51,10 +49,8 @@ def openFile(filename): # Opens "filename" as a file
     sourceFile = open(filename, "r")
     for line in sourceFile:
         line = line.split(";",1)[0] #removes all comments
-        populateSourceArray(line)#output only command and not comments
-        line = line.replace("\t","TAB ")
-        #print(line.upper().split())
-        #print(re.split("[ \n]", line.upper()))
+        populateSourceArray(line) #output only command and not comments
+        #line = line.replace("\t","TAB ")
         linearray.append(line.upper().split()) #Ensures all the lines are upper case, then splits by space
     sourceFile.close()
     return linearray
@@ -110,6 +106,25 @@ def returnBinary(commandLine):
         print("Error: 5")
 
     return returnstring
+
+def consolePrint(binaryStrings):
+    x=0 #For counting lines
+    print("Output: ")
+    for i in binaryStrings:
+        printstring = ""
+        if (LINENUM and x<10):
+            printstring += str(x) + " |\t"
+        elif (LINENUM and x>=10):
+            printstring += str(x) + "|\t"
+        if (SOURCE):
+             printstring += SOURCELINES[x] + "\t| "
+        if (BINARY):
+             printstring += i + "\t| "
+        if(HEX):
+            printstring +=  toHex(i.replace(" ",""))
+
+        print(printstring)
+        x+=1
 def printBinary(binaryStrings):
     x=0
     print("Binary: ")
@@ -144,7 +159,6 @@ def writeHex(binaryStrings):
     for i in binaryStrings:
         printstring = ""
         file.write(toHex(i.replace(" ","")) + "\n")
-        print(printstring)
         x+=1
     file.close()
 
