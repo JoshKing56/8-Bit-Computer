@@ -25,9 +25,11 @@ HEX = True
 
 #main methods
 def main(): #Main method
+
+    arguments = parse()
     file = getFileName() #gets file name from args
     allCommands = openFile(file) #opens the file
-    
+
     binaryStrings = [] #creates new array to hold binary values
     for command in allCommands:
         binaryStrings.append(returnBinary(command))#populates binaryStrings
@@ -37,6 +39,20 @@ def main(): #Main method
     writeHex(binaryStrings)
 
     return 0;
+
+def parse():
+    parser = argparse.ArgumentParser(description='BB8 Assembler')
+    #Output for command line
+    parser.add_argument('-i', '--input', dest='fileinput', required=True, type=argparse.FileType('r'), help='Specifies the file for the input')
+
+    parser.add_argument('-n', '--number', dest='count_addrs_unique', action='store_true', help='Count unique id addresses')
+
+    parser.add_argument('-t', '--top', dest='top_addrs_count', type=int, default=-1, help='List N most frequent addresses')
+
+    parser.add_argument('-v', '--visits', dest='visiting_ip', help='IP address for which visits should be counted')
+
+    args = parser.parse_args()
+
 
 def getFileName(): #Returns filename from args. TODO: Should add more checks
     if (len(sys.argv)!=2):# If the input isn't "python compiler.py [filename]"
