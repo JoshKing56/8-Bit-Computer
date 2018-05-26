@@ -4,12 +4,12 @@
 #include "programmer.h"
 
 void setup() {
-  pinMode (SYSTEM_CLOCK_PIN, OUTPUT) ;
+attach_timers();
+attach_ocl_isr();
+attach_upload_ISR();
 
-  Timer3.attachInterrupt(system_clock_isr);
-  Timer3.start(1); // Calls every 50ms
 }
 
 void loop() {
-
+   get_new_program();
 }
