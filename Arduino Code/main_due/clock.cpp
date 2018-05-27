@@ -24,12 +24,21 @@ void attach_ocl_isr() { //point to the same interrupt for any pin change
 void set_system_frequency() {
   int freq;
   switch (frequency_method()) {
-    case 1:   freq = DEFAULT_SYSTEM_FREQ;  break;
-    case 2:   freq = reading_to_freq(read_analog_input());  break;
-    case 3:   freq = reading_to_freq(read_com_port());      break;
-    default:  freq = DEFAULT_SYSTEM_FREQ;
+    case 1:
+      break;  //ocl register, done through interrups
+    case 2:
+      freq = reading_to_freq(read_analog_input());
+      Timer2.setPeriod(1000000 / freq);
+      break;
+    case 3:
+      freq = reading_to_freq(read_com_port());
+      Timer2.setPeriod(1000000 / freq);
+      break;
+    default:
+      freq = DEFAULT_SYSTEM_FREQ;
+      Timer2.setPeriod(1000000 / freq);
   }
-  Timer1.setPeriod(1000000 / freq);
+
 }
 
 byte frequency_method() {
@@ -48,14 +57,14 @@ byte frequency_method() {
 
 
 void read_ocl_register() {
-  // need to respond fast, disable interrupts from output clocks temporarily, read pins and update timer period
+  // need to data coherancy, disable interrupts from output clocks temporarily, read pins and update timer period
   noInterrupts();
   uint32_t read_port_c = (PIOC->PIO_PDSR);
   uint32_t read_port_a = (PIOA->PIO_PDSR);
   uint8_t lower_bits = (read_port_c >> 5) & 0x000F ; // read C6-C9
   uint8_t middle_bits = (read_port_a >> 18) & 0x0003;
   uint8_t upper_bits = (read_port_c >> 11) & 0x00FF; // nb these are reverse order
-  uint16_t reading = (upper_bits<<6) & (middle_bits<<4) & (lower_bits);
+  uint16_t reading = (upper_bits << 6) & (middle_bits << 4) & (lower_bits);
 
   Timer2.setFrequency(reading_to_freq(reading));
   interrupts();
