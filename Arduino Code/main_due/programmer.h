@@ -9,7 +9,7 @@
 #define NOP_BYTE2 0
 #define NOP_BYTE3 0
 
-// #define AUTO_UPLOAD
+// #define AUTO_UPLOAD    //define to upload automatically when new program arrived
 #define RESET_IDLE_STATE HIGH
 
 
