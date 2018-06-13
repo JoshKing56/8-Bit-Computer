@@ -16,8 +16,8 @@
 #define ROM_NUM_ADDRESS_PINS 13 //number of pins used in address
 #define ROM_NUM_BYTE_PINS 8
 #define ROM_NUM_ENABLE_PINS 7
-#define ROM_CHIP_ENABLE_PIN_0 44 //one hot coding for each rom chip
-
+#define ROM_CHIP_WRITE_ENABLE_PIN_0 44 // one hot coding for each rom chip
+#define ROM_CHIP_OUTPUT_ENABLE_PIN 52 // one disable to rule them all 
 
 
 #define OCL_REGISTER_PIN_0 44 //port C6-9 A19-20 C12-19

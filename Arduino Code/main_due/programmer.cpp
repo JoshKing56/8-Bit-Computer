@@ -18,15 +18,15 @@ void attach_upload_ISR() {
 
 void upload_program() {
   noInterrupts();
-  set_upload_pins();  //set as output for load
+  set_upload_pins(false, false, false, false);  //set as output for load
   for (int i = 0; i < 2 ^ ROM_NUM_ADDRESS_PINS; i++) //loop through address space
   {
     write_address(i);
-    for (int j = 0; j < NUM_CONTROL_ROM_CHIPS+NUM_INSTRUCTION_ROM_CHIPS; j++) { //loop through instruction rom chips
+    for (int j = 0; j < NUM_CONTROL_ROM_CHIPS + NUM_INSTRUCTION_ROM_CHIPS; j++) { //loop through instruction rom chips
       write_byte(i, j);
     }
   }
-  release_upload_pins();  //set to input for saftey
+  release_upload_pins(true, true, true, true);  //set to input for saftey
   interrupts();
 
   software_reset();
@@ -38,7 +38,7 @@ void write_address(int address) {
   {
     byte shift_by = k - ROM_ADDRESS_PIN_0;
     byte data_bit = ((address >> shift_by) & 1);
-    
+
     digitalWrite(k, data_bit);
   }
 }
@@ -52,10 +52,10 @@ void write_byte(int i, int j) {
     data_bit = ((current_program[i][j] >> shift_by) & 1);
     digitalWrite(k, data_bit);
   }
-  digitalWrite(ROM_CHIP_ENABLE_PIN_0 + j, ROM_ENABLE_WRITE);  //enable write pin
-  clock_pulse(last_write_time);
-  last_write_time = micros();
-  digitalWrite(ROM_CHIP_ENABLE_PIN_0 + j, !ROM_ENABLE_WRITE);  //disable write pin
+  //  digitalWrite(ROM_CHIP_WRITE_ENABLE_PIN_0 + j, ROM_ENABLE_WRITE);  //enable write pin
+  //  clock_pulse(last_write_time);
+  //  last_write_time = micros();
+  //  digitalWrite(ROM_CHIP_WRITE_ENABLE_PIN_0 + j, !ROM_ENABLE_WRITE);  //disable write pin
 }
 
 byte get_new_program() {
@@ -113,24 +113,64 @@ void software_reset() {
 
 }
 
-void set_upload_pins() {
+void set_upload_pins(bool data = false, bool addr = false, bool chip_enable = false, bool output_disable = false) {
   int k = 0;
-  for (k = ROM_BYTE_PIN_0; k < ROM_BYTE_PIN_0 + ROM_NUM_BYTE_PINS; k++)
-    pinMode(k, OUTPUT);
-  for (k = ROM_ADDRESS_PIN_0; k < ROM_ADDRESS_PIN_0 + ROM_NUM_ADDRESS_PINS; k++)
-    pinMode(k, OUTPUT);
-  for (k = ROM_CHIP_ENABLE_PIN_0; k < ROM_CHIP_ENABLE_PIN_0 + ROM_NUM_ENABLE_PINS; k++)
-    pinMode(k, OUTPUT);
+  if (data) {
+    for (k = ROM_BYTE_PIN_0; k < ROM_BYTE_PIN_0 + ROM_NUM_BYTE_PINS; k++) {
+      pinMode(k, OUTPUT);
+      digitalWrite(k, LOW);
+    }
+  }
+
+  if (addr) {
+    for (k = ROM_ADDRESS_PIN_0; k < ROM_ADDRESS_PIN_0 + ROM_NUM_ADDRESS_PINS; k++) {
+      pinMode(k, OUTPUT);
+      digitalWrite(k, LOW);
+    }
+  }
+  if (chip_enable) {
+    for (k = ROM_CHIP_WRITE_ENABLE_PIN_0; k < ROM_CHIP_WRITE_ENABLE_PIN_0 + ROM_NUM_ENABLE_PINS; k++) {
+      pinMode(k, OUTPUT);
+      digitalWrite(k, HIGH);
+    }
+  }
+  if (output_disable) {
+    pinMode(ROM_CHIP_OUTPUT_ENABLE_PIN, OUTPUT);
+    digitalWrite(ROM_CHIP_OUTPUT_ENABLE_PIN, !ROM_ENABLE_OUTPUT);
+  }
+  
 }
 
-void release_upload_pins() {
-int k=0;
-  for (k = ROM_BYTE_PIN_0; k < ROM_BYTE_PIN_0 + ROM_NUM_BYTE_PINS; k++)
-    pinMode(k, INPUT);
-  for (k = ROM_ADDRESS_PIN_0; k < ROM_ADDRESS_PIN_0 + ROM_NUM_ADDRESS_PINS; k++)
-    pinMode(k, INPUT);
-  for (k = ROM_CHIP_ENABLE_PIN_0; k < ROM_CHIP_ENABLE_PIN_0 + ROM_NUM_ENABLE_PINS; k++)
-    pinMode(k, INPUT);
+void release_upload_pins(bool data = false, bool addr = false, bool chip_enable = false,  bool output_disable = false) {
+  int k = 0;
+  if (data) {
+    for (k = ROM_BYTE_PIN_0; k < ROM_BYTE_PIN_0 + ROM_NUM_BYTE_PINS; k++)
+      pinMode(k, INPUT);
+  }
+  if (addr) {
+    for (k = ROM_ADDRESS_PIN_0; k < ROM_ADDRESS_PIN_0 + ROM_NUM_ADDRESS_PINS; k++)
+      pinMode(k, INPUT);
+  }
+
+  if (chip_enable) {
+    for (k = ROM_CHIP_WRITE_ENABLE_PIN_0; k < ROM_CHIP_WRITE_ENABLE_PIN_0 + ROM_NUM_ENABLE_PINS; k++)
+      pinMode(k, INPUT);
+  }
+  if (output_disable) {
+    pinMode(ROM_CHIP_OUTPUT_ENABLE_PIN, INPUT);
+  }
 }
 
+void enable_chip_write(int addr) {
+  digitalWrite(ROM_CHIP_OUTPUT_ENABLE_PIN, !ROM_ENABLE_OUTPUT); //disable all outputs
+  delayMicroseconds(1000);
+  digitalWrite(ROM_CHIP_WRITE_ENABLE_PIN_0 + addr, ROM_ENABLE_WRITE);  //enable write to this address
+}
+
+void disable_chip_write(int addr) {
+  digitalWrite(ROM_CHIP_WRITE_ENABLE_PIN_0 + addr, !ROM_ENABLE_WRITE);
+  delayMicroseconds(1000);
+  digitalWrite(ROM_CHIP_OUTPUT_ENABLE_PIN, ROM_ENABLE_OUTPUT); //enable all outputs
+
+}
 

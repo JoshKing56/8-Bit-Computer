@@ -14,7 +14,8 @@
 #define AUTO_UPLOAD    //define to upload automatically when new program arrived
 #define RESET_IDLE_STATE HIGH
 
-#define ROM_ENABLE_WRITE HIGH
+#define ROM_ENABLE_WRITE LOW
+#define ROM_ENABLE_OUTPUT LOW 
 
 #define NUM_INSTRUCTION_ROM_CHIPS 3
 #define NUM_CONTROL_ROM_CHIPS 4
@@ -27,7 +28,8 @@ void write_address(int address);
 void write_byte(int i, int j);
 void clock_pulse(int last_write);
 void software_reset();
-void set_upload_pins();
-void release_upload_pins();
-
+void set_upload_pins(bool data, bool addr, bool chip_enable, bool output_disable);
+void release_upload_pins(bool data, bool addr, bool chip_enable, bool output_disable);
+void enable_chip_write(int addr);
+void disable_chip_write(int addr);
 #endif
