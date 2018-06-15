@@ -11,15 +11,16 @@
 class HM6264 {
   public:
     HM6264() {}
-    HM6264(uint8_t address_pin_array[13], uint8_t data_pin_array[8], uint8_t OE, uint8_t WE, bool read_pins)
+    HM6264(uint8_t address_pin_array[13], uint8_t data_pin_array[8], uint8_t OE, uint8_t WE)
     {
-      init(address_pin_array, data_pin_array, OE, WE, read_pins);
+      init(address_pin_array, data_pin_array, OE, WE);
     }
+    
 
     void write(int address, byte data);
     byte read(int address);
-    void init(uint8_t address_pin_array[13], uint8_t data_pin_array[8], uint8_t OE, uint8_t WE, bool read_pins);
-
+    byte read(int address, byte (*callback_func)());
+    void init(uint8_t address_pin_array[13], uint8_t data_pin_array[8], uint8_t OE, uint8_t WE);
 
   private:
 
@@ -27,8 +28,6 @@ class HM6264 {
     byte WE_pin = 0;
     byte data_pins [8] = {0};
     byte address_pins[13] = {0};
-
-    bool read_using_same_pins = true;
 
     void set_upload_pins();
     void release_upload_pins();
@@ -40,10 +39,6 @@ class HM6264 {
     void set_address_pins();
     void release_address_pins();
 
-    byte alt_read_func();
-
 };
-
-
 
 #endif HM6264_H

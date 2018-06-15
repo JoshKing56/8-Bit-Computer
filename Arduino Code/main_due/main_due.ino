@@ -6,11 +6,12 @@
 
 #define STOP_AFTER_TESTING    //comment this to run program after testing finished
 
-Test test;
+//Test test;
 
 void setup() {
   Serial.begin(115200);
-  test.run_tests();
+  attach_programmer();
+  //test.run_tests();
   attach_timers();
   attach_ocl_isr();
   attach_upload_ISR();    //upload on button push

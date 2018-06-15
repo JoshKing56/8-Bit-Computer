@@ -4,7 +4,7 @@
 #include "HM6264.h"
 
 
-void HM6264::init(uint8_t address_pin_array[13], uint8_t data_pin_array[8], uint8_t OE, uint8_t WE, bool read_pins) {
+void HM6264::init(uint8_t address_pin_array[13], uint8_t data_pin_array[8], uint8_t OE, uint8_t WE) {
   for (uint8_t i = 0; i < 13; i++) {
     address_pins[i] = address_pin_array[i];
   }
@@ -14,8 +14,6 @@ void HM6264::init(uint8_t address_pin_array[13], uint8_t data_pin_array[8], uint
   }
   OE_pin = OE;
   WE_pin = WE;
-
-  read_using_same_pins = read_pins;
 
   pinMode(OE_pin, OUTPUT);
   pinMode(WE_pin, OUTPUT);
@@ -45,19 +43,12 @@ void HM6264::write(int address, byte data) {
   {
     data_bit = (data >> k) & 1;
     digitalWrite(data_pins[k], data_bit);
-    //    Serial.print(data_pins[k]);
-    //    Serial.print("\t");
-    //    Serial.println(data_bit);
-    //delay(1);
   }
 
-  delayMicroseconds(10);
+  delayMicroseconds(1);
   disable_chip_write();   //move to disable output state
   release_upload_pins();  //set pins as inputs
-
 }
-
-
 
 byte HM6264::read(int address) {
 
@@ -76,23 +67,37 @@ byte HM6264::read(int address) {
   }
 
   enable_chip_read();    //move to write state
-  delayMicroseconds(10);
+  delayMicroseconds(1);
 
-  if (read_using_same_pins) {
-    for (int i = 0; i < 8; i++) {
-      read_data = read_data + (digitalRead(data_pins[i]) << i);
-      //      Serial.print(data_pins[i]);
-      //      Serial.print("\t");
-      //      Serial.print(digitalRead(data_pins[i]));
-      //      Serial.print("\t");
-      //      Serial.println(read_data);
-      //delay(1);
-    }
+  for (int i = 0; i < 8; i++) {
+    read_data = read_data + (digitalRead(data_pins[i]) << i);
   }
-  else {
-    read_data = alt_read_func();    //use if cannot read back throguh same pins (eg if several chips chained together for writing)
+  disable_chip_read();   //move to disable output state
+  release_address_pins();  //set pins as inputs
+
+  return read_data;
+}
+
+byte HM6264::read(int address, byte (*callback_func)()) {
+
+  bool data_bit;
+  byte read_data = 0;
+
+  release_upload_pins();  //ensure pins released as we change states
+  disable_chip_read();   //move to disable state
+  set_address_pins();     //addr pins to output
+
+  //write address
+  for (int k = 0; k < 13; k++) // write output pins
+  {
+    data_bit = (address >> k) & 1;
+    digitalWrite(address_pins[k], data_bit);
   }
-  //Serial.println(read_data);
+
+  enable_chip_read();    //move to write state
+  delayMicroseconds(1);
+  read_data = callback_func();    //use if cannot read back throguh same pins (eg if several chips chained together for writing)
+
   disable_chip_read();   //move to disable output state
   release_address_pins();  //set pins as inputs
 
@@ -121,6 +126,7 @@ void HM6264::set_data_pins() {
     digitalWrite(data_pins[k], LOW);
   }
 }
+
 void HM6264::set_address_pins() {
   byte k = 0;
   for (k = 0; k < 13; k++) {
@@ -155,9 +161,4 @@ void HM6264::disable_chip_read() {
   digitalWrite(WE_pin, !WE_PIN_WRITE); //move to disable output mode or read
   digitalWrite(OE_pin, !OE_PIN_READ);  //move to disable output mode
 }
-
-byte HM6264::alt_read_func() {
-
-}
-
 
