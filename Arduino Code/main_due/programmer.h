@@ -22,11 +22,15 @@
 #define NUM_INSTRUCTION_ROM_CHIPS 3
 #define NUM_CONTROL_ROM_CHIPS 4
 
+
 void attach_programmer();
 void attach_upload_ISR();
 void upload_program();
 byte get_new_program();
 void clock_pulse(int last_write);
 void software_reset();
+
+byte read_back();   //rom read callback function
+void disable_read_mux();
 
 #endif

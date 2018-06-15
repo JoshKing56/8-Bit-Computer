@@ -22,14 +22,14 @@
 
 
 #define COMMON_MUX_PIN_0 54 //A0
-#define ROM_1_2_MUX_ENALBE_PIN 58   //for rom chips 1 and 2
+#define ROM_1_2_MUX_ENABLE_PIN 58   //for rom chips 1 and 2
 #define ROM_3_MUX_ENABLE_PIN 59     //for rom chip 3
 #define CONTROL_1_MUX_ENABLE_PIN 60 //for control chips 1,2
 #define CONTROL_2_MUX_ENABLE_PIN 61 //for control chips 3,4
-#define MUX_INPUT PIN 53
+#define MUX_INPUT_PIN 53
 #define ANALOG_POT_PIN 65   //A11
 #define NUM_MUX_PINS 4
-
+#define READ_MUX_DISABLE_STATE LOW
 
 
 #endif
