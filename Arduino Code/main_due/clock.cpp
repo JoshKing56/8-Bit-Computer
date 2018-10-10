@@ -4,7 +4,6 @@
 #include "pins.h"
 #include "clock.h"
 
-
 void attach_timers() {
   pinMode (SYSTEM_CLOCK_PIN, OUTPUT) ;
   pinMode (DISPLAY_CLOCK_PIN, OUTPUT) ;
@@ -17,7 +16,6 @@ void attach_timers() {
 }
 
 void attach_ocl_isr() { //point to the same interrupt for any pin change
-  
   for (int i = 0; i < 14; i++) {
     attachInterrupt(OCL_REGISTER_PIN_0 + i, read_ocl_register, CHANGE);
   }
@@ -59,7 +57,7 @@ byte frequency_method() {
 
 
 void read_ocl_register() {
-  // need data coherancy, disable interrupts from output clocks temporarily, read pins and update timer period
+  // need to data coherancy, disable interrupts from output clocks temporarily, read pins and update timer period
   noInterrupts();
   uint32_t read_port_c = (PIOC->PIO_PDSR);
   uint32_t read_port_a = (PIOA->PIO_PDSR);
@@ -108,7 +106,8 @@ void system_clock_isr() {
 }
 
 
-void display_clock_isr(){
+void display_clock_isr()
+{
   static byte display_clock_flag = 0;
 
   if (display_clock_flag == 1) { //If pin on.
