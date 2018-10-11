@@ -5,3 +5,4 @@ LD &A B
 LD &12 B
 LD C &12
 LD D &A
+CLR

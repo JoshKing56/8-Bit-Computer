@@ -243,7 +243,7 @@ def ld(operands): #LD
 
     return returnstring
 def clr(operands): #CLR
-    return "000 100 0000 000 000 00000000"
+    return "000 100 1111 000 000 00000000"
 def add(operands): #ADD
     returnstring = "001"
     wregister = matchWriteRegister(operands[0])
