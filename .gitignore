@@ -3,3 +3,4 @@
 ~$*.doc*
 *.hex
 */*.hex
+~$*.xlsx
