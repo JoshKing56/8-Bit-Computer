@@ -1,5 +1,9 @@
 LD A 8
 LD B A
+ADD C A B
+ADD D A 10
+SUB B A D
+SUB B A 100
 LD B 9
 LD &A B
 LD &12 B
