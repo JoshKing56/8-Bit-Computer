@@ -184,7 +184,7 @@ def toBinarySixLong(decimalstring):
     unformatted = unformatted[2:len(unformatted)] #Chops off the first two characters, '0b'
     while (len(unformatted)<6):
         unformatted = "0" + unformatted
-        return str(unformatted)
+    return str(unformatted)
 
 def matchWriteRegister(register): #Returns binary for register write
     if (register=="A"): return WRITE[0]
@@ -426,8 +426,8 @@ def nop(operands): #eq
     return "100 100 0000 000 000 00000000"
 def ocl(operands): #eq
     returnstring = "100 101 0000 "
-    returnstring += toBinarySixLong(operands[0]) + " "
-    returnstring += toBinary(operands[1])
+    returnstring += toBinarySixLong(str(int(int(operands[0])/256))) + " "
+    returnstring += toBinary(str(int(int(operands[0])%256)))
     return returnstring
 
 
